@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>IFBFA - Official Bookshelf & Comics</title>
+    <style>
+        body { margin: 0; background: #070d19; display: flex; align-items: center; justify-content: center; height: 100vh; overflow: hidden; color: #fff; font-family: 'Arial', sans-serif; }
+        #books-container { width: 900px; height: 660px; background: #0b1424; position: relative; border-radius: 12px; box-shadow: 0 0 50px rgba(235,180,50,0.3); overflow: hidden; display: flex; flex-direction: column; border: 2px solid #ebb432; }
+        
+        /* 🏛️ TOP SECTOR: ACADEMIC HEADER */
+        #header-sector { padding: 15px 25px; background: #0a1428; border-bottom: 4px solid #ebb432; text-align: center; box-sizing: border-box; }
+        h1 { color: #ebb432; font-size: 22px; font-weight: bold; margin: 0 0 4px 0; letter-spacing: 1px; }
+        .sub-title { font-size: 12px; color: #ffffff; margin: 0; line-height: 1.4; }
+        
+        /* 🎨 CENTER SECTOR: MAXIMUM ARTWORK SHOWCASE */
+        #artwork-sector { flex: 1; background: radial-gradient(circle at center, #0f2355 0%, #070d19 100%); display: flex; align-items: center; justify-content: center; padding: 5px 10px; box-sizing: border-box; position: relative; overflow: hidden; }
+        #showcase-img { width: 680px; height: auto; border-radius: 6px; box-shadow: 0 0 25px rgba(0,0,0,0.75); border: 1px solid rgba(235,180,50,0.3); }
+        
+        /* 💳 BOTTOM SECTOR: COMMERCE, SECURITY & NAVIGATION */
+        #action-sector { background: #070d19; border-top: 2px solid rgba(255,255,255,0.05); padding: 12px 35px 15px 35px; box-sizing: border-box; position: relative; }
+        #action-flex { display: flex; align-items: center; justify-content: space-between; max-width: 830px; margin: 0 auto 8px auto; }
+        .placeholder-spacer { width: 130px; }
+        
+        /* 👑 ELITE GOLDEN LINK BRIDGE TO PAYHIP */
+        .payhip-link { background: #ebb432; color: #ffffff; border: 2px solid #ffffff; padding: 10px 25px; font-size: 13.5px; font-weight: bold; border-radius: 6px; cursor: pointer; text-decoration: none; display: inline-block; text-shadow: 1px 1px 2px rgba(0,0,0,0.5); box-shadow: 0 4px 15px rgba(0,0,0,0.4); transition: all 0.2s ease; }
+        .payhip-link:hover { background: #ffffff; color: #070d19; border-color: #ebb432; box-shadow: 0 0 20px #ebb432; transform: scale(1.03); }
+        
+        /* 🔙 CLEAN NAVIGATION BACK TO MAIN HUB */
+        #back-btn { background: #dc143c; color: #fff; border: 1px solid #fff; padding: 10px 20px; font-size: 12px; font-weight: bold; border-radius: 6px; cursor: pointer; text-decoration: none; box-shadow: 0 4px 10px rgba(0,0,0,0.4); display: inline-block; text-shadow: 1px 1px 2px rgba(0,0,0,0.3); transition: all 0.1s ease; }
+        #back-btn:hover { background: #fff; color: #dc143c; box-shadow: 0 0 15px #dc143c; transform: scale(1.02); }
+        
+        /* 🛡️ SECURITY SHIELD TEXT */
+        .security-shield { font-size: 10.5px; color: rgba(255,255,255,0.4); line-height: 1.4; margin: 0; text-align: center; max-width: 650px; margin-left: auto; margin-right: auto; }
+        .shield-icon { color: #ebb432; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div id="books-container">
+    <div id="header-sector">
+        <h1>OFFICIAL IFBFA COMICS & EDUCATIONAL BOOKSHELF</h1>
+        <p class="sub-title">Discover illustrated stories, official rulebooks, and character guides designed exclusively by our Research Institute.</p>
+    </div>
+
+    <div id="artwork-sector">
+        <img id="showcase-img" src="books.jpg" alt="IFBFA Official Bookshelf Showcase">
+    </div>
+
+    <div id="action-sector">
+        <div id="action-flex">
+            <div class="placeholder-spacer"></div>
+            
+            <a href="https://payhip.com/IFBFA" target="_blank" class="payhip-link">🛒 VISIT OFFICIAL IFBFA DIGITAL STORE & AUDIOBOOKS</a>
+            
+            <!-- Исправленная чистая кнопка возврата -->
+            <a id="back-btn" href="hub.html" onclick="sessionStorage.clear();">BACK TO HUB ➡️</a>
+        </div>
+        
+        <p class="security-shield"><span class="shield-icon">🔒 SECURE ENCRYPTION:</span> Transactions are safely processed through the internationally certified Payhip gateway, secured by bank-grade SSL encryption layers and global Visa/Mastercard verification protocols.</p>
+    </div>
+</div>
+
+</body>
+</html>
+

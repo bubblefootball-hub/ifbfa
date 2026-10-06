@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Bubble Football: World Cup Arena</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-user-select: none; user-select: none; }
+        body { background-color: #020617; color: #ffffff; font-family: -apple-system, sans-serif; overflow: hidden; touch-action: none; display: flex; flex-direction: column; justify-content: space-between; align-items: center; height: 100vh; padding: 16px; }
+        #menu-screen { position: fixed; inset: 0; background-color: rgba(15, 23, 42, 0.98); display: flex; flex-direction: column; justify-content: space-between; align-items: center; padding: 24px; z-index: 50; }
+        .title-block { text-align: center; margin-top: 20px; }
+        h1 { font-size: 36px; font-weight: 900; text-transform: uppercase; font-style: italic; background: linear-gradient(to right, #22d3ee, #3b82f6, #6366f1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .subtitle { font-size: 11px; color: #22d3ee; font-weight: bold; text-transform: uppercase; margin-top: 4px; }
+        .instruction-box { width: 100%; max-width: 320px; background-color: rgba(30, 41, 59, 0.5); border: 2px dashed #334155; border-radius: 20px; padding: 16px; margin: 10px 0; }
+        .ins-title { font-size: 14px; font-weight: 900; color: #22d3ee; text-transform: uppercase; text-align: center; margin-bottom: 12px; }
+        .step { display: flex; align-items: center; gap: 12px; font-size: 13px; margin-bottom: 10px; color: #cbd5e1; font-weight: 500; }
+        .step:last-child { margin-bottom: 0; }
+        .step-icon { font-size: 20px; background: #1e293b; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; border-radius: 50%; border: 1px solid #475569; flex-shrink: 0; }
+        .energy-box { background-color: rgba(30, 41, 59, 0.8); border: 1px solid #334155; padding: 10px 20px; border-radius: 16px; text-align: center; width: 100%; max-width: 200px; }
+        .energy-title { font-size: 10px; color: #94a3b8; font-weight: bold; text-transform: uppercase; }
+        .energy-val { font-size: 20px; font-weight: 900; color: #facc15; margin-top: 2px; }
+        .tournament-box { background-color: rgba(2, 6, 23, 0.5); border: 1px solid #1e293b; padding: 12px; border-radius: 16px; width: 100%; max-width: 320px; }
+        .tour-title { font-size: 12px; font-weight: 900; color: #94a3b8; text-transform: uppercase; text-align: center; margin-bottom: 8px; }
+        .stages { display: flex; justify-content: space-between; align-items: center; font-size: 11px; font-weight: bold; }
+        .circle { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background-color: #1e293b; color: #94a3b8; border: 1px solid #334155; }
+        .circle.active { background-color: #22d3ee; color: #020617; border-color: #22d3ee; }
+        .line { height: 2px; flex-grow: 1; background-color: #334155; margin: 0 6px; transform: translateY(-8px); }
+        .line.active { background-color: #22d3ee; }
+        .btn-group { width: 100%; max-width: 240px; display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+        .btn-main { background: linear-gradient(to right, #06b6d4, #2563eb); color: #020617; font-weight: 900; padding: 14px; border-radius: 16px; font-size: 18px; border: none; cursor: pointer; text-transform: uppercase; }
+        .btn-sub { background-color: #1e293b; color: #facc15; font-weight: bold; padding: 10px; border-radius: 16px; font-size: 12px; border: 1px solid rgba(250, 204, 21, 0.3); }
+        .top-bar { width: 100%; max-width: 360px; margin-top: 8px; display: flex; justify-content: space-between; align-items: center; }
+        .team-name { font-weight: 900; color: #ef4444; }
+        .score-board { background-color: #0f172a; border: 1px solid #1e293b; padding: 6px 16px; border-radius: 12px; font-weight: 900; font-size: 18px; }
+        .score-p { color: #22d3ee; }
+        .score-a { color: #ef4444; }
+        .timer-val { font-weight: 900; color: #facc15; }
+        .arena-container { position: relative; margin: auto 0; border: 4px solid #1e293b; border-radius: 24px; overflow: hidden; }
+        #overlay-alert { position: absolute; inset: 0; background-color: rgba(2, 6, 23, 0.8); display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+        .alert-text { font-size: 36px; font-weight: 900; color: #22d3ee; }
+        .alert-sub { font-size: 14px; color: #94a3b8; margin-top: 8px; }
+        .hint { font-size: 10px; color: #475569; text-transform: uppercase; font-weight: bold; text-align: center; }
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+    <div id="menu-screen">
+        <div class="title-block"><h1>Bubble Football</h1><div class="subtitle">Bumper Clash Arena</div></div>
+        <div class="instruction-box">
+            <div class="ins-title">📖 HOW TO PLAY:</div>
+            <div class="step"><div class="step-icon">🔵</div><div>You control the <b>BLUE</b> bumper ball.</div></div>
+            <div class="step"><div class="step-icon">🎯</div><div>Drag the blue ball back, <b>aim</b> and release to launch!</div></div>
+            <div class="step"><div class="step-icon">⚽</div><div>Smash the white ball into the <b>TOP goal</b>! Dash your rival!</div></div>
+        </div>
+        <div class="energy-box"><div class="energy-title">Your Energy</div><div class="energy-val">⚡ <span id="energy-count">3 / 3</span></div></div>
+        <div class="tournament-box">
+            <div class="tour-title">Stage: NZ Cup</div>
+            <div class="stages">
+                <div><div class="circle active">✓</div>1/4</div><div class="line" id="line-1"></div>
+                <div><div id="stage-semi" class="circle">2</div>1/2</div><div class="line" id="line-2"></div>
+                <div><div id="stage-final" class="circle">3</div>Final</div>
+            </div>
+        </div>
+       <div class="btn-group">
+<button id="start-match-btn" class="btn-main">Play a match (-1 ⚡)</button><button id="buy-energy-btn" class="btn-sub">PUSH FOR UNLIMITED</button></div><a href="hub.html" style="display: inline-block; background: #e74c3c; color: #ffffff; border: 2px solid #ffffff; padding: 10px 25px; font-size: 14px; font-weight: bold; border-radius: 6px; text-decoration: none; text-shadow: 1px 1px 2px rgba(0,0,0,0.5); box-shadow: 0 4px 10px rgba(0,0,0,0.4); font-family: Arial, sans-serif; letter-spacing: 0.5px; margin-top: 15px;">MAIN MENU</a>
+    </div>
+    <div class="top-bar">
+        <div><span style="font-size:10px;color:#64748b;display:block;">Opponent</span><span id="opponent-name" class="team-name">Auckland FC</span></div>
+        <div class="score-board"><span class="score-p" id="score-p">0</span> : <span class="score-a" id="score-a">0</span></div>
+        <div style="text-align: right;"><span style="font-size:10px;color:#64748b;display:block;">Время</span><span id="timer" class="timer-val">30s</span></div>
+    </div>
+    <div class="arena-container"><canvas id="arenaCanvas" width="360" height="480"></canvas><div id="overlay-alert"><h2 id="alert-text" class="alert-text">ГОЛ! ⚽💥</h2><div id="alert-sub" class="alert-sub"></div></div></div>
+    <div class="hint">CONTROLS: DRAG THE BLUE BUMPER AND RELEASE TO SHOOT</div>
+<script>
+const canvas = document.getElementById('arenaCanvas');
+const ctx = canvas.getContext('2d');
+let energy = 3; let currentStage = 1; let gameActive = false; let matchTimer = 30; let timerInterval;
+const opponents = ["Auckland FC", "Wellington United", "Kiwi Bumper Kings"];
+let ball = { x: 180, y: 240, vx: 0, vy: 0, radius: 10, friction: 0.98 };
+let player = { x: 180, y: 380, vx: 0, vy: 0, radius: 24, team: 'player', isDragged: false };
+let ai = { x: 180, y: 100, vx: 0, vy: 0, radius: 24, team: 'ai' };
+let dragStart = { x: 0, y: 0, curX: 0, curY: 0 }; let pScore = 0, aScore = 0;
+
+document.getElementById('start-match-btn').addEventListener('click', startMatch);
+document.getElementById('buy-energy-btn').addEventListener('click', () => { 
+    alert('NOW IT`S UNLIMITED'); 
+    energy = 999; 
+    document.getElementById('energy-count').innerText = "UNLIMITED 🔥"; 
+});
+
+function startMatch() {
+    if (energy <= 0) { alert('Нет энергии!'); return; }
+    if (energy !== 999) { energy--; document.getElementById('energy-count').innerText = energy + " / 3"; }
+    document.getElementById('menu-screen').classList.add('hidden');
+    document.getElementById('opponent-name').innerText = opponents[currentStage - 1];
+    resetPositions(); pScore = 0; aScore = 0;
+    document.getElementById('score-p').innerText = pScore; document.getElementById('score-a').innerText = aScore;
+    matchTimer = 30; document.getElementById('timer').innerText = matchTimer + 's'; gameActive = true;
+    clearInterval(timerInterval);
+    timerInterval = setInterval(() => { matchTimer--; document.getElementById('timer').innerText = matchTimer + 's'; if (matchTimer <= 0) endMatch(); }, 1000);
+}
+
+function resetPositions() {
+    ball = { x: 180, y: 240, vx: 0, vy: 0, radius: 10, friction: 0.98 };
+    player = { x: 180, y: 380, vx: 0, vy: 0, radius: 24, team: 'player', isDragged: false };
+    ai = { x: 180, y: 100, vx: 0, vy: 0, radius: 24, team: 'ai' };
+}
+
+function endMatch() {
+    gameActive = false; clearInterval(timerInterval);
+    const alertBox = document.getElementById('overlay-alert');
+    const alertText = document.getElementById('alert-text');
+    const alertSub = document.getElementById('alert-sub');
+    alertBox.style.display = 'flex';
+    if (pScore > aScore) {
+        if (currentStage === 3) {
+            alertText.innerText = "🏆 ЧЕМПИОН! 🏆"; alertSub.innerText = "Вы выиграли Кубок!"; currentStage = 1;
+            ['stage-semi','stage-final','line-1','line-2'].forEach(id=>document.getElementById(id).classList.remove('active'));
+        } else {
+            alertText.innerText = "🎉 ПОБЕДА! 🎉"; alertSub.innerText = "Вы прошли дальше.";
+            if (currentStage === 1) { document.getElementById('stage-semi').classList.add('active'); document.getElementById('line-1').classList.add('active'); }
+            else if (currentStage === 2) { document.getElementById('stage-final').classList.add('active'); document.getElementById('line-2').classList.add('active'); }
+            currentStage++;
+        }
+    } else { alertText.innerText = "💥 DEFEAT! 💥"; alertSub.innerText = "Попробуйте снова!"; }
+    setTimeout(() => { alertBox.style.display = 'none'; document.getElementById('menu-screen').classList.remove('hidden'); }, 3000);
+}
+canvas.addEventListener('mousedown', startTouch); canvas.addEventListener('mousemove', moveTouch); canvas.addEventListener('mouseup', endTouch);
+canvas.addEventListener('touchstart', (e) => startTouch(e.touches)); canvas.addEventListener('touchmove', (e) => { moveTouch(e.touches); e.preventDefault(); }, {passive: false}); canvas.addEventListener('touchend', endTouch);
+
+function startTouch(e) { 
+    if (!gameActive) return; 
+    const rect = canvas.getBoundingClientRect(); 
+    const t = e.touches ? e.touches[0] : e;
+    const mx = t.clientX - rect.left; 
+    const my = t.clientY - rect.top; 
+    if (Math.hypot(player.x - mx, player.y - my) < player.radius * 1.5) { player.isDragged = true; dragStart = { x: mx, y: my, curX: mx, curY: my }; } 
+}
+function moveTouch(e) { 
+    if (!player.isDragged) return; 
+    const rect = canvas.getBoundingClientRect(); 
+    const t = e.touches ? e.touches[0] : e;
+    dragStart.curX = t.clientX - rect.left; 
+    dragStart.curY = t.clientY - rect.top; 
+}
+function endTouch() { if (!player.isDragged) return; player.isDragged = false; player.vx = (dragStart.x - dragStart.curX) * 0.18; player.vy = (dragStart.y - dragStart.curY) * 0.18; }
+
+function updatePhysics() {
+    if (!gameActive) return;
+    ball.vx *= ball.friction; ball.vy *= ball.friction; player.vx *= 0.97; player.vy *= 0.97; ai.vx *= 0.97; ai.vy *= 0.97;
+    ball.x += ball.vx; ball.y += ball.vy; player.x += player.vx; player.y += player.vy; ai.x += ai.vx; ai.y += ai.vy;
+    if (ball.y < canvas.height * 0.65) { ai.vx += (ball.x - ai.x) * 0.025; ai.vy += (ball.y - 120 - ai.y) * 0.025; }
+    let distP = Math.hypot(ai.x - player.x, ai.y - player.y);
+    if (distP < player.radius + ai.radius) { let angle = Math.atan2(ai.y - player.y, ai.x - player.x); player.vx -= Math.cos(angle) * 7; player.vy -= Math.sin(angle) * 7; ai.vx += Math.cos(angle) * 7; ai.vy += Math.sin(angle) * 7; }
+    [player, ai].forEach(p => { let distB = Math.hypot(p.x - ball.x, p.y - ball.y); if (distB < p.radius + ball.radius) { let angle = Math.atan2(ball.y - p.y, ball.x - p.x); let speed = Math.hypot(p.vx, p.vy) + 4; ball.vx = Math.cos(angle) * speed; ball.vy = Math.sin(angle) * speed; } });
+    [player, ai, ball].forEach(o => { if (o.x < o.radius) { o.x = o.radius; o.vx *= -0.8; } if (o.x > canvas.width - o.radius) { o.x = canvas.width - o.radius; o.vx *= -0.8; } });
+    [player, ai].forEach(p => { if (p.y < p.radius) { p.y = p.radius; p.vy *= -0.8; } if (p.y > canvas.height - p.radius) { p.y = canvas.height - p.radius; p.vy *= -0.8; } });
+    if (ball.y < ball.radius) { if (ball.x > 120 && ball.x < 240) goal('player'); else { ball.y = ball.radius; ball.vy *= -0.8; } }
+    if (ball.y > canvas.height - ball.radius) { if (ball.x > 120 && ball.x < 240) goal('ai'); else { ball.y = canvas.height - ball.radius; ball.vy *= -0.8; } }
+}
+
+function goal(winner) { 
+    gameActive = false; 
+    if(winner === 'player') { pScore++; } else { aScore++; } 
+    document.getElementById('score-p').innerText = pScore; 
+    document.getElementById('score-a').innerText = aScore; 
+    const overlay = document.getElementById('overlay-alert'); 
+    document.getElementById('alert-text').innerText = "ГОЛ! ⚽💥"; 
+    document.getElementById('alert-sub').innerText = ""; 
+    overlay.style.display = 'flex'; 
+    setTimeout(() => { overlay.style.display = 'none'; resetPositions(); if(matchTimer > 0) gameActive = true; }, 1200); 
+}
+
+function drawArena() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.strokeStyle = 'rgba(56, 189, 248, 0.04)'; ctx.lineWidth = 1;
+    for(let i=0; i<canvas.width; i+=30) { ctx.beginPath(); ctx.moveTo(i,0); ctx.lineTo(i,canvas.height); ctx.stroke(); }
+    for(let j=0; j<canvas.height; j+=30) { ctx.beginPath(); ctx.moveTo(0,j); ctx.lineTo(canvas.width,j); ctx.stroke(); }
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)'; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(180, 240, 40, 0, Math.PI*2); ctx.moveTo(0, 240); ctx.lineTo(360, 240); ctx.stroke();
+    ctx.strokeStyle = '#ef4444'; ctx.strokeRect(120, -2, 120, 4); ctx.strokeStyle = '#22d3ee'; ctx.strokeRect(120, canvas.height - 2, 120, 4);
+    if (player.isDragged) { ctx.strokeStyle = '#22d3ee'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(player.x, player.y); ctx.lineTo(player.x + (dragStart.x - dragStart.curX), player.y + (dragStart.y - dragStart.curY)); ctx.stroke(); }
+    [player, ai].forEach(p => { let grad = ctx.createRadialGradient(p.x-4, p.y-4, 2, p.x, p.y, p.radius); if(p.team === 'player') { grad.addColorStop(0, '#e0f7fa'); grad.addColorStop(0.4, '#22d3ee'); grad.addColorStop(1, '#0891b2'); } else { grad.addColorStop(0, '#ffeeee'); grad.addColorStop(0.4, '#f87171'); grad.addColorStop(1, '#b91c1c'); } ctx.fillStyle = grad; ctx.beginPath(); ctx.arc(p.x, p.y, p.radius, 0, Math.PI*2); ctx.fill(); ctx.strokeStyle = 'rgba(255,255,255,0.3)'; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(p.x, p.y, p.radius + 2, 0, Math.PI*2); ctx.stroke(); });
+    ctx.fillStyle = '#ffffff'; ctx.beginPath(); ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI*2); ctx.fill();
+}
+
+function gameLoop() { updatePhysics(); drawArena(); requestAnimationFrame(gameLoop); }
+gameLoop();
+</script>
+</body>
+</html> 
+<a href="hub.html" style="display: inline-block; background: #e74c3c; color: #ffffff; border: 2px solid #ffffff; padding: 10px 25px; font-size: 14px; font-weight: bold; border-radius: 6px; text-decoration: none; text-shadow: 1px 1px 2px rgba(0,0,0,0.5); box-shadow: 0 4px 10px rgba(0,0,0,0.4); font-family: Arial, sans-serif; letter-spacing: 0.5px; margin-top: 15px;">MAIN MENU</a>
+                           
